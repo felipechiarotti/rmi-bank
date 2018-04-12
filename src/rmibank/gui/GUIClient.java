@@ -5,7 +5,11 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -22,14 +26,17 @@ public class GUIClient {
 	JButton executeAction;
 	JComboBox actions;
 	String actionsList[] = {"Sacar", "Ver Saldo"};
+	Bank stub;
 	
-	public GUIClient(Client c) {
+	public GUIClient(Client c) throws AccessException, RemoteException, NotBoundException {
 		this.client = c;
+		Registry reg = LocateRegistry.getRegistry(5001);
+		this.stub = (Bank) reg.lookup("RMI Bank Service");
 	}
 	
 	
 	public void setFrame() {
-		frame = new JFrame();
+		frame = new JFrame(client.getName());
 		
 		executeAction = new JButton("executar");
 		actions = new JComboBox(actionsList);
@@ -42,13 +49,13 @@ public class GUIClient {
 				try {
 					if(actions.getSelectedIndex() == 0) {
 						tmp = JOptionPane.showInputDialog(null, "Digite o valor para sacar:");
-						if(client.getStub().widthdraw(client.getID(), Double.parseDouble(tmp))) {
+						if(stub.widthdraw(client.getId(), Double.parseDouble(tmp))) {
 							JOptionPane.showMessageDialog(null, "Operação realizada com sucesso!");
 						}else {
 							JOptionPane.showMessageDialog(null, "Você não tem saldo suficiente!");
 						}
 					}else {
-						JOptionPane.showMessageDialog(null, "R$:"+client.getStub().balance(client.getID()));
+						JOptionPane.showMessageDialog(null, "R$:"+stub.balance(client.getId()));
 					}
 				} catch (NumberFormatException | RemoteException | HeadlessException | SQLException e1) {
 					e1.printStackTrace();

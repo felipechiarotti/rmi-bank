@@ -5,6 +5,7 @@
  */
 package rmibank.code.client;
 
+import java.io.Serializable;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -20,24 +21,55 @@ import rmibank.code.service.Bank;
  *
  * @author a120111
  */
-public class Client {
-    private Bank stub;
-    private int id;
+public class Client implements Serializable{
+	private int id;
+	private String name;
+	private int agnum;
+	private int accnum;
+	private double balance;
+	
+	public Client(int id, String name, int agnum, int accnum, double balance) {
+		this.id = id;
+		this.name = name;
+		this.agnum = agnum;
+		this.accnum = accnum;
+		this.balance = balance;
+	}
+	
+	public Client() {
+		
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAgnum() {
+		return agnum;
+	}
+	public void setAgnum(int agnum) {
+		this.agnum = agnum;
+	}
+	public int getAccnum() {
+		return accnum;
+	}
+	public void setAccnum(int accnum) {
+		this.accnum = accnum;
+	}
+	public double getBalance() {
+		return balance;
+	}
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 
-    public Client(String ip, int port, String serviceName) throws RemoteException, NotBoundException{
-            Registry registry = LocateRegistry.getRegistry(ip, port);
-            stub = (Bank) registry.lookup(serviceName);
-    }
     
-    public Bank getStub() {
-    	return this.stub;
-    }
-    
-    public void setID(int id) {
-    	this.id = id;
-    }
-    
-    public int getID() {
-    	return this.id;
-    }
 }

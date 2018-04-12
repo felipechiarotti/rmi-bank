@@ -14,7 +14,6 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 
 public interface Bank extends Remote{
-	public int logIn(String agnum, String accnum, String pass) throws RemoteException, SQLException;
     public double balance(int id) throws RemoteException, SQLException;
     public boolean widthdraw(int id, double value) throws RemoteException, SQLException;
 }

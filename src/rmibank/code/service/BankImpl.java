@@ -32,15 +32,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
         statement = (PgStatement) conn.createStatement();
     }
 
-	public int logIn(String agnum, String accnum, String pass) throws RemoteException, SQLException {
-		ResultSet result;
-		String sql = "SELECT id FROM client WHERE agency_number="+Integer.parseInt(agnum)+" AND account_number = "+Integer.parseInt(accnum)+" AND password = '"+pass+"'";
-		
-		result = statement.executeQuery(sql);
-		if(result.next()) 
-			return result.getInt(1);
-		return -1;
-	}
+
 	
 	
     public double balance(int id) throws RemoteException, SQLException{

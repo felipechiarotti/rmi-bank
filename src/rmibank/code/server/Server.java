@@ -11,19 +11,24 @@ import java.rmi.registry.Registry;
 import java.sql.SQLException;
 
 import rmibank.code.service.BankImpl;
+import rmibank.code.service.LoginImpl;
 
 /**
  *
  * @author a120111
  */
-public class Server{
-	BankImpl remObject;
+public class Server<T>{
+	BankImpl remObjectBank;
+	LoginImpl remObjectLogin;
 	
-	
-    public Server(int port) throws RemoteException, AlreadyBoundException, SQLException{
-        remObject = new BankImpl();
-        Registry registry = LocateRegistry.createRegistry(port);
-        registry.bind("RMI Bank Service", remObject);
-        System.out.println("[!] Seridor RMI aberto na porta "+port);
+    public Server(int portLogIn, int portBank) throws RemoteException, AlreadyBoundException, SQLException{
+    	remObjectBank = new BankImpl();
+    	remObjectLogin = new LoginImpl();
+    	
+        Registry registry = LocateRegistry.createRegistry(portLogIn);
+        registry.bind("RMI Login Service", remObjectLogin);
+        
+        registry = LocateRegistry.createRegistry(portBank);
+        registry.bind("RMI Bank Service", remObjectBank);
     }
 }

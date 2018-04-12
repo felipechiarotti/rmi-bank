@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import rmibank.code.server.Server;
+import rmibank.code.service.BankImpl;
+import rmibank.code.service.LoginImpl;
 
 /**
  *
@@ -22,9 +24,8 @@ import rmibank.code.server.Server;
 public class RunServer {
     public static void main(String[] args){
             try {
-				new Server(5000);
+				new Server(5000,5001);
 			} catch (RemoteException | AlreadyBoundException | SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     }
