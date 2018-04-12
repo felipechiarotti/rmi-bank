@@ -10,11 +10,9 @@ public class Database {
 		try {
 			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Driver JDBC não encontrado!");
 		}
-		
-		
+
 		if(conn == null) {
 			String url = "jdbc:postgresql://localhost:5432/bank";
 			String user = "postgres";

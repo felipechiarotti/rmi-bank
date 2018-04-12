@@ -11,9 +11,8 @@ package rmibank.code.service;
  */
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.sql.SQLException;
 
 public interface Bank extends Remote{
-    public double balance(int id) throws RemoteException, SQLException;
-    public boolean widthdraw(int id, double value) throws RemoteException, SQLException;
+    public double balance(int id) throws RemoteException;
+    public boolean widthdraw(int id, double value) throws RemoteException;
 }

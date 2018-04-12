@@ -5,11 +5,6 @@
  */
 package rmibank;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import rmibank.code.client.Client;
 import rmibank.gui.GUILogin;
 
 /**

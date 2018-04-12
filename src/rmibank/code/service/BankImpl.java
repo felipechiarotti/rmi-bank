@@ -6,8 +6,6 @@
 package rmibank.code.service;
 
 import java.rmi.*;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,25 +33,36 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
 
 	
 	
-    public double balance(int id) throws RemoteException, SQLException{
-		ResultSet result;
-    	String sql = "SELECT balance FROM client WHERE id = "+id;
-		result = statement.executeQuery(sql);
-		result.next();
-    	return result.getLong(1);
+    public double balance(int id) throws RemoteException{
+    	try {
+			ResultSet result;
+	    	String sql = "SELECT balance FROM client WHERE id = "+id;
+			result = statement.executeQuery(sql);
+			result.next();
+	    	return result.getLong(1);
+    	}catch(SQLException ex) {
+    		System.out.println("[!] Banco de dados indisponível");
+    		throw new RemoteException();
+    	}
     }
     
-    public boolean widthdraw(int id, double value) throws RemoteException, SQLException{
-		ResultSet result;
-    	String sql = "SELECT balance FROM client WHERE id = "+id;
-    	result = statement.executeQuery(sql);
-    	result.next();
-		double newValue = result.getLong(1) - value;
-		if(newValue > 0) {
-			sql = "UPDATE client SET balance = balance - "+value+" WHERE id = "+id;
-			statement.executeUpdate(sql);
-			return true;
+    public boolean widthdraw(int id, double value) throws RemoteException{
+		try {
+    	
+	    	ResultSet result;
+	    	String sql = "SELECT balance FROM client WHERE id = "+id;
+	    	result = statement.executeQuery(sql);
+	    	result.next();
+			double newValue = result.getLong(1) - value;
+			if(newValue > 0) {
+				sql = "UPDATE client SET balance = balance - "+value+" WHERE id = "+id;
+				statement.executeUpdate(sql);
+				return true;
+			}
+	    	return false;
+		}catch(SQLException ex) {
+    		System.out.println("[!] Banco de dados indisponível");
+    		throw new RemoteException();	
 		}
-    	return false;
     }
 }
