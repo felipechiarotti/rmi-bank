@@ -1,0 +1,14 @@
+drop table Client;
+
+CREATE TABLE Client(
+	id int,
+	name varchar(30) NOT NULL,
+	Address varchar(50) NOT NULL,
+	City varchar(20) NOT NULL,
+	Age int NOT NULL, 
+	agency_number int NOT NULL,
+	account_number int NOT NULL,
+	password varchar(10) NOT NULL,
+	balance real NOT NULL,
+	CONSTRAINT PK_Clients PRIMARY KEY (id)
+);
