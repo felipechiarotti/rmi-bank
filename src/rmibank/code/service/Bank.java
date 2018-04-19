@@ -15,4 +15,6 @@ import java.rmi.RemoteException;
 public interface Bank extends Remote{
     public double balance(int id) throws RemoteException;
     public boolean widthdraw(int id, double value) throws RemoteException;
+    public boolean transfer(int fromId, int destAg, int destAcc, double value) throws RemoteException;
+    public boolean deposit(int id, double value) throws RemoteException;
 }

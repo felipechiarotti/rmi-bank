@@ -12,3 +12,13 @@ CREATE TABLE Client(
 	balance real NOT NULL,
 	CONSTRAINT PK_Clients PRIMARY KEY (id)
 );
+
+CREATE TABLE transactions{
+	id int NOT NULL,
+	id_client int NOT NULL,
+	transaction_type varchar(10) NOT NULL,
+	transaction_operation varchar(15) NOT NULL,
+	value real NOT NULL,
+	
+	CONSTRAINT PK_transactions PRIMARY KEY (id, id_client)
+};
