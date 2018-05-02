@@ -15,9 +15,9 @@ public class LoginImpl extends UnicastRemoteObject implements Login {
 	Connection conn;
 	PgStatement statement;
 	
-	public LoginImpl() throws RemoteException, SQLException {
+	public LoginImpl(int agNumber) throws RemoteException, SQLException {
 		super();
-        conn = Database.getConnection();
+        conn = new Database(agNumber).getConn();
         statement = (PgStatement) conn.createStatement();
 	}
 

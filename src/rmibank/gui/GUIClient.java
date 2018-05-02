@@ -31,8 +31,8 @@ public class GUIClient {
 	
 	public GUIClient(Client c) throws AccessException, RemoteException, NotBoundException {
 		this.client = c;
-		Registry reg = LocateRegistry.getRegistry(5000);
-		this.stub = (Bank) reg.lookup("RMI Bank Service");
+		Registry reg = LocateRegistry.getRegistry("127.0.0.1",9765);
+		this.stub = (Bank) reg.lookup("RMI Bank Service "+this.client.getAgnum());
 	}
 	
 	
@@ -118,21 +118,9 @@ public class GUIClient {
 			}
 		});
 		
-		executeAction.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-
-			}
-			
-		});
-		
 		frame.setLayout(new GridLayout(1,2));
 		frame.add(actions);
-		
-		frame.getRootPane().setDefaultButton(executeAction);
-		frame.add(executeAction);
+
 		
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setSize(400,100);

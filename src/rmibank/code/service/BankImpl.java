@@ -24,9 +24,9 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
 	Connection conn;
 	PgStatement statement;
 	
-    public BankImpl() throws RemoteException, SQLException{
+    public BankImpl(int agNumber) throws RemoteException, SQLException{
         super();
-        conn = Database.getConnection();
+        conn = new Database(agNumber).getConn();
         statement = (PgStatement) conn.createStatement();
     }
 
@@ -48,7 +48,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
     
     public boolean widthdraw(int id, double value) throws RemoteException{
 		try {
-			Transaction t = new Transaction(id, 1, value);
+			Transaction t = new Transaction(id, 1, value, conn);
 			return t.executeTransaction();
 		}catch(SQLException ex) {
     		System.out.println("[!] Banco de dados indisponível");
@@ -57,7 +57,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
     }
     
     public boolean deposit(int id, double value) throws RemoteException{
-    	Transaction t = new Transaction(id, 2, value);
+    	Transaction t = new Transaction(id, 2, value, conn);
     	try{
     		return t.executeTransaction();
     	}catch(SQLException ex) {
@@ -75,8 +75,8 @@ public class BankImpl extends UnicastRemoteObject implements Bank {
 	    	if(result.next()) {
 	    		int destId = result.getInt(1);
 
-	        	Transaction debitTransaction = new Transaction(fromId, 3, -1, value);
-	        	Transaction creditTransaction = new Transaction(destId, 3, 1, value);
+	        	Transaction debitTransaction = new Transaction(fromId, 3, -1, value, conn);
+	        	Transaction creditTransaction = new Transaction(destId, 3, 1, value, conn);
 	        	t1 = debitTransaction.executeTransaction();
 		    	t2 = creditTransaction.executeTransaction();
 	    	}

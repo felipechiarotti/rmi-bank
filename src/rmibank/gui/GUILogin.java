@@ -8,12 +8,15 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -26,6 +29,7 @@ public class GUILogin {
 	JTextField agnum;
 	JTextField accnum;
 	JPasswordField pass;
+	JRadioButton agency[];
 	JButton exec;
 	
 	
@@ -35,6 +39,9 @@ public class GUILogin {
 		agnum = new JTextField();
 		accnum = new JTextField();
 		pass = new JPasswordField();
+		agency = new JRadioButton[2];
+		agency[0] = new JRadioButton("Agência 1");
+		agency[1] = new JRadioButton("Agência 2");
 		exec = new JButton("LogIn");
 		exec.requestFocus();
 		
@@ -44,8 +51,14 @@ public class GUILogin {
 				if(agnum.getText().length() > 0 && accnum.getText().length() >0 && String.valueOf(pass.getPassword()).length() > 0) {
 					Client client;
 					try {
-						Registry reg = LocateRegistry.getRegistry("127.0.0.1", 5000);
-						Login login = (Login) reg.lookup("RMI Login Service");
+						int agencyNumber = 0;
+						for(int i = 0; i<agency.length; i++) {
+							if(agency[i].isSelected()) {
+								agencyNumber = i+1;
+							}
+						}
+						Registry reg = LocateRegistry.getRegistry("127.0.0.1", 9765);
+						Login login = (Login) reg.lookup("RMI Login Service "+agencyNumber);
 						if((client = login.logIn(agnum.getText(), accnum.getText(), (String) String.valueOf(pass.getPassword())))!= null) {
 							new GUIClient(client).setFrame();
 							frame.setVisible(false);
@@ -64,7 +77,7 @@ public class GUILogin {
 		});
 		
 		
-		panel.setLayout(new GridLayout(3,2));
+		panel.setLayout(new GridLayout(4,2));
 		
 		panel.add(new JLabel("Agência:"));
 		panel.add(agnum);
@@ -74,6 +87,13 @@ public class GUILogin {
 		
 		panel.add(new JLabel("Senha:"));
 		panel.add(pass);
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		agency[0].setSelected(true);
+		buttonGroup.add(agency[0]);
+		buttonGroup.add(agency[1]);
+		panel.add(agency[0]);
+		panel.add(agency[1]);
 		
 		panel.setBorder(new EmptyBorder(10,10,10,10));
 		frame.add(panel);

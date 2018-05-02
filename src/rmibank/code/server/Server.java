@@ -18,18 +18,24 @@ import rmibank.code.service.LoginImpl;
  * @author a120111
  */
 public class Server{
-	BankImpl remObjectBank;
-	LoginImpl remObjectLogin;
+	BankImpl remObjectBank[];
+	LoginImpl remObjectLogin[];
 	
     public Server(int port){
+    	
     	try{
-    		remObjectBank = new BankImpl();
-	    	remObjectLogin = new LoginImpl();
+        	remObjectBank = new BankImpl[2];
+	    	remObjectLogin = new LoginImpl[2];
 	    	
 	        Registry registry = LocateRegistry.createRegistry(port);
-	        registry.bind("RMI Login Service", remObjectLogin);
-	        registry.bind("RMI Bank Service", remObjectBank);
-	        
+
+	        for(int i = 0; i < remObjectBank.length; i++) {
+	        	remObjectLogin[i] = new LoginImpl(i+1);
+	        	remObjectBank[i] = new BankImpl(i+1);
+		        registry.bind("RMI Login Service "+(i+1), remObjectLogin[i]);
+	        	registry.bind("RMI Bank Service "+(i+1), remObjectBank[i]);
+	        }
+
 	        System.out.println("[!] Serviços em execução");
 	        for(String name : registry.list()) {
 	        	System.out.println("[!] "+name);

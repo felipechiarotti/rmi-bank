@@ -13,6 +13,6 @@ import rmibank.code.server.Server;
  */
 public class RunServer {
     public static void main(String[] args){
-		new Server(5000);
+		new Server(9765);
     }
 }
